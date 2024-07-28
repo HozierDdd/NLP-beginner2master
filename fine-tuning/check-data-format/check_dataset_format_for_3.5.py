@@ -4,6 +4,8 @@ import numpy as np
 from collections import defaultdict
 from check_dataset_format import CheckDatasetFormat
 
+"""====Reference: https://cookbook.openai.com/examples/chat_finetuning_data_prep ============================"""
+
 
 class CheckDatasetFormatFor3P5(CheckDatasetFormat):
     def __init__(self, filepath="../dataset/prompt_3.5_train.jsonl"):
@@ -54,7 +56,6 @@ class CheckDatasetFormatFor3P5(CheckDatasetFormat):
         else:
             print("No errors found")
 
-
     def num_tokens_from_messages(self, messages, tokens_per_message=3, tokens_per_name=1):
         num_tokens = 0
         for message in messages:
@@ -78,3 +79,8 @@ class CheckDatasetFormatFor3P5(CheckDatasetFormat):
         print(f"min / max: {min(values)}, {max(values)}")
         print(f"mean / median: {np.mean(values)}, {np.median(values)}")
         print(f"p5 / p95: {np.quantile(values, 0.1)}, {np.quantile(values, 0.9)}")
+
+
+if __name__ == "__main__":
+    check_dataset = CheckDatasetFormatFor3P5()
+    check_dataset.error_check()
