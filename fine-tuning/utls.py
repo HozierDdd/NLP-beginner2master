@@ -1,12 +1,15 @@
 import tiktoken
 import numpy as np
+from openai import OpenAI
 
 
-class Utils():
-    def __init__(self, dataset):
+class Utils:
+    def __init__(self, dataset, filepath, model="gpt-4o-mini"):
         self.dataset = dataset
         self.encoding = tiktoken.get_encoding("cl100k_base")
         self.convo_lens = []
+        self.filepath = filepath
+        self.model = model
 
     def num_tokens_from_messages(self, messages, tokens_per_message=3, tokens_per_name=1):
         num_tokens = 0
@@ -26,7 +29,8 @@ class Utils():
                 num_tokens += len(self.encoding.encode(message["content"]))
         return num_tokens
 
-    def print_distribution(self, values, name):
+    @staticmethod
+    def print_distribution(values, name):
         print(f"\n#### Distribution of {name}:")
         print(f"min / max: {min(values)}, {max(values)}")
         print(f"mean / median: {np.mean(values)}, {np.median(values)}")
@@ -86,3 +90,41 @@ class Utils():
         print(f"Dataset has ~{n_billing_tokens_in_dataset} tokens that will be charged for during training")
         print(f"By default, you'll train for {n_epochs} epochs on this dataset")
         print(f"By default, you'll be charged for ~{n_epochs * n_billing_tokens_in_dataset} tokens")
+
+    def upload(self):
+        client = OpenAI()
+        client.files.create(
+            file=open(self.filepath, "rb"),
+            purpose="fine-tune")
+
+    def create_job(self):
+        client = OpenAI()
+        client.fine_tuning.jobs.create(
+            training_file="file-abc123",
+            model=self.model
+        )
+    #     # List 10 fine-tuning jobs
+    #     client.fine_tuning.jobs.list(limit=10)
+    #
+    #     # Retrieve the state of a fine-tune
+    #     client.fine_tuning.jobs.retrieve("ftjob-abc123")
+    #
+    #     # Cancel a job
+    #     client.fine_tuning.jobs.cancel("ftjob-abc123")
+    #
+    #     # List up to 10 events from a fine-tuning job
+    #     client.fine_tuning.jobs.list_events(fine_tuning_job_id="ftjob-abc123", limit=10)
+    #
+    #     # Delete a fine-tuned model (must be an owner of the org the model was created in)
+    #     client.models.delete("ft:gpt-3.5-turbo:acemeco:suffix:abc123")
+
+    def use_trained_model(self):
+        client = OpenAI()
+        completion = client.chat.completions.create(
+            model="ft:gpt-4o-mini:my-org:custom_suffix:id",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": "Hello!"}
+            ]
+        )
+        print(completion.choices[0].message)
