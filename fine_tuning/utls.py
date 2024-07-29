@@ -42,9 +42,9 @@ class Utils:
 
         Missing System/User Messages: Counts the number of conversations missing a "system" or "user" message. Such messages are critical for defining the assistant's behavior and initiating the conversation.
         Number of Messages Per Example: Summarizes the distribution of the number of messages in each conversation, providing insight into dialogue complexity.
-        Total Tokens Per Example: Calculates and summarizes the distribution of the total number of tokens in each conversation. Important for understanding fine-tuning costs.
+        Total Tokens Per Example: Calculates and summarizes the distribution of the total number of tokens in each conversation. Important for understanding fine_tuning costs.
         Tokens in Assistant's Messages: Calculates the number of tokens in the assistant's messages per conversation and summarizes this distribution. Useful for understanding the assistant's verbosity.
-        Token Limit Warnings: Checks if any examples exceed the maximum token limit (16,385 tokens), as such examples will be truncated during fine-tuning, potentially resulting in data loss."""
+        Token Limit Warnings: Checks if any examples exceed the maximum token limit (16,385 tokens), as such examples will be truncated during fine_tuning, potentially resulting in data loss."""
         n_missing_system = 0
         n_missing_user = 0
         n_messages = []
@@ -66,7 +66,7 @@ class Utils:
         self.print_distribution(self.convo_lens, "num_total_tokens_per_example")
         self.print_distribution(assistant_message_lens, "num_assistant_tokens_per_example")
         n_too_long = sum(l > 16385 for l in self.convo_lens)
-        print(f"\n{n_too_long} examples may be over the 16,385 token limit, they will be truncated during fine-tuning")
+        print(f"\n{n_too_long} examples may be over the 16,385 token limit, they will be truncated during fine_tuning")
 
     def cost_estimation(self):
         """Cost Estimation"""
@@ -103,20 +103,20 @@ class Utils:
             training_file="file-abc123",
             model=self.model
         )
-    #     # List 10 fine-tuning jobs
-    #     client.fine_tuning.jobs.list(limit=10)
-    #
-    #     # Retrieve the state of a fine-tune
-    #     client.fine_tuning.jobs.retrieve("ftjob-abc123")
-    #
-    #     # Cancel a job
-    #     client.fine_tuning.jobs.cancel("ftjob-abc123")
-    #
-    #     # List up to 10 events from a fine-tuning job
-    #     client.fine_tuning.jobs.list_events(fine_tuning_job_id="ftjob-abc123", limit=10)
-    #
-    #     # Delete a fine-tuned model (must be an owner of the org the model was created in)
-    #     client.models.delete("ft:gpt-3.5-turbo:acemeco:suffix:abc123")
+        # List 10 fine_tuning jobs
+        client.fine_tuning.jobs.list(limit=10)
+
+        # Retrieve the state of a fine-tune
+        client.fine_tuning.jobs.retrieve("ftjob-abc123")
+
+        # Cancel a job
+        client.fine_tuning.jobs.cancel("ftjob-abc123")
+
+        # List up to 10 events from a fine_tuning job
+        client.fine_tuning.jobs.list_events(fine_tuning_job_id="ftjob-abc123", limit=10)
+
+        # Delete a fine-tuned model (must be an owner of the org the model was created in)
+        client.models.delete("ft:gpt-3.5-turbo:acemeco:suffix:abc123")
 
     def use_trained_model(self):
         client = OpenAI()

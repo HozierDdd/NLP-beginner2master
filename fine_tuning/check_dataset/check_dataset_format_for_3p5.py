@@ -1,6 +1,5 @@
 from collections import defaultdict
-from check_dataset_format import CheckDatasetFormat
-
+from fine_tuning.check_dataset.check_dataset_format import CheckDatasetFormat
 """====Reference: https://cookbook.openai.com/examples/chat_finetuning_data_prep ============================"""
 
 
