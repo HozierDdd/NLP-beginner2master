@@ -7,18 +7,33 @@ from config import OPENAI_API_KEY
 """STEP 0: initialize environment"""
 filepath = "dataset/prompt_3.5_train.jsonl"
 openai.api_key = OPENAI_API_KEY
-# Example of making a request
-response = openai.Completion.create(
-    engine="text-davinci-003",
-    prompt="What are the benefits of eating healthy foods?",
-    max_tokens=50
-)
+# # Example of making a request
+# response = openai.Completion.create(
+#     engine="text-davinci-003",
+#     prompt="What are the benefits of eating healthy foods?",
+#     max_tokens=50
+# )
+#
+# print(response.choices[0].text.strip())
 
-print(response.choices[0].text.strip())
+response = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",  # or another model from the updated API
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "What are the benefits of eating healthy foods?"}
+    ]
+)
+print(response.choices[0].message['content'])
 """STEP 1: check dataset format"""
 check_dataset = CheckDatasetFormatFor3P5(filepath=filepath)
 check_dataset.error_check()
-"""STEP 2: craft prompts"""
+"""STEP 2: craft prompts from the dataset"""
+for item in check_dataset.dataset:
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=item['messages']
+    )
+    print(response.choices[0].message['content'].strip())
 
 """STEP 3: upload dataset to OpenAI"""
 utils = Utils(dataset=check_dataset.dataset, filepath=filepath)

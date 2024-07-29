@@ -1,6 +1,6 @@
 import tiktoken
 import numpy as np
-from openai import OpenAI
+import openai
 
 
 class Utils:
@@ -92,31 +92,10 @@ class Utils:
         print(f"By default, you'll be charged for ~{n_epochs * n_billing_tokens_in_dataset} tokens")
 
     def upload(self):
-        client = OpenAI()
-        client.files.create(
+        client = openai
+        client.File.create(
             file=open(self.filepath, "rb"),
             purpose="fine-tune")
-
-    def create_job(self):
-        client = OpenAI()
-        client.fine_tuning.jobs.create(
-            training_file="file-abc123",
-            model=self.model
-        )
-        # List 10 fine_tuning jobs
-        client.fine_tuning.jobs.list(limit=10)
-
-        # Retrieve the state of a fine-tune
-        client.fine_tuning.jobs.retrieve("ftjob-abc123")
-
-        # Cancel a job
-        client.fine_tuning.jobs.cancel("ftjob-abc123")
-
-        # List up to 10 events from a fine_tuning job
-        client.fine_tuning.jobs.list_events(fine_tuning_job_id="ftjob-abc123", limit=10)
-
-        # Delete a fine-tuned model (must be an owner of the org the model was created in)
-        client.models.delete("ft:gpt-3.5-turbo:acemeco:suffix:abc123")
 
     def use_trained_model(self):
         client = OpenAI()
