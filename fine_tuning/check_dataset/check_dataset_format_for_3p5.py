@@ -4,7 +4,7 @@ from fine_tuning.check_dataset.check_dataset_format import CheckDatasetFormat
 
 
 class CheckDatasetFormatFor3P5(CheckDatasetFormat):
-    def __init__(self, filepath="../dataset/prompt_3.5_train.jsonl"):
+    def __init__(self, filepath="../dataset/prompt_3.5_eval.jsonl"):
         super().__init__(file_path=filepath)
 
     def error_check(self):
