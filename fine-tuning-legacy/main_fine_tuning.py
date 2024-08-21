@@ -9,7 +9,7 @@ check_dataset.error_check()
 
 """STEP 3: upload dataset to OpenAI"""
 
-"""STEP 4: create fine-tuning job"""
+"""STEP 4: create fine-tuning-legacy job"""
 
 """STEP 5: use trained model to generate responses"""
 
